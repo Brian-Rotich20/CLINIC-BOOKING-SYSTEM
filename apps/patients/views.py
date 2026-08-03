@@ -4,13 +4,23 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from drf_spectacular.utils import extend_schema
+
 from apps.patients.models import Patient
 from apps.appointments.models import Appointment
 from apps.appointments.serializers import AppointmentSerializer
 
 
+@extend_schema(
+    responses={200: AppointmentSerializer(many=True)},
+    summary="Get a patient's upcoming appointments",
+    description=(
+        "Returns the patient's upcoming, non-cancelled appointments, "
+        "sorted by date ascending. (Bonus endpoint.)"
+    ),
+)
 class PatientUpcomingAppointmentsView(APIView):
-    """GET /patients/{id}/appointments — upcoming, non-cancelled, sorted by date."""
+    """GET /patients/{id}/appointments"""
 
     def get(self, request, patient_id):
         patient = get_object_or_404(Patient, id=patient_id)
