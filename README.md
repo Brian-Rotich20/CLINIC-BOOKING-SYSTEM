@@ -6,7 +6,7 @@ reschedule. Built for the Savannah Informatics Backend Developer take-home
 assessment.
 
 - **Live URL:** https://clinic-booking-system-8k20.onrender.com/
-- **Repo:** [ADD YOUR GITHUB REPO URL HERE]
+- **Repo:** https://github.com/Brian-Rotich20/CLINIC-BOOKING-SYSTEM
 - **API docs (Swagger UI):** https://clinic-booking-system-8k20.onrender.com/api/schema/swagger-ui/
 - **Stack:** Python · Django · Django REST Framework · PostgreSQL · Render · GitHub Actions
 

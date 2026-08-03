@@ -1,0 +1,64 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches: [main]      # test job runs on every PR targeting main
+  push:
+    branches: [main]      # test + deploy run when a PR is merged (push to main)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+        ports:
+          - 5432:5432
+        # health check ensures Postgres is actually ready before tests run,
+        # not just that the container started
+        options: >-
+          --health-cmd "pg_isready -U test_user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DEBUG: "True"
+      SECRET_KEY: "ci-test-secret-key"
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+      DB_NAME: test_db
+      DB_USER: test_user
+      DB_PASSWORD: test_pass
+      DB_HOST: localhost
+      DB_PORT: 5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run migrations
+        run: python manage.py migrate
+
+      - name: Run tests
+        run: python manage.py test apps.appointments apps.doctors apps.patients
+
+  deploy:
+    needs: test                                            # won't run if tests fail
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'   # only on merge, not PRs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render deploy
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
