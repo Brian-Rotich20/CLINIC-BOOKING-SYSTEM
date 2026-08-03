@@ -7,7 +7,7 @@ from apps.appointments.views import (
 )
 
 urlpatterns = [
-    path("appointments", AppointmentCreateView.as_view(), name="appointment-create"),
-    path("appointments/<int:appointment_id>/cancel", AppointmentCancelView.as_view(), name="appointment-cancel"),
-    path("appointments/<int:appointment_id>/reschedule", AppointmentRescheduleView.as_view(), name="appointment-reschedule"),
+    path("", AppointmentCreateView.as_view(), name="appointment-create"),
+    path("<int:appointment_id>/cancel", AppointmentCancelView.as_view(), name="appointment-cancel"),
+    path("<int:appointment_id>/reschedule", AppointmentRescheduleView.as_view(), name="appointment-reschedule"),
 ]
