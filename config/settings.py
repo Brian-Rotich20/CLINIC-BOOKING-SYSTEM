@@ -10,7 +10,7 @@ environ.Env.read_env(BASE_DIR / ".env")
 print("DB HOST:", env("DB_HOST"))
 print("DB NAME:", env("DB_NAME"))
 
-LLOWED_HOSTS = os.getenv(
+ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
     "localhost,127.0.0.1"
 ).split(",")
