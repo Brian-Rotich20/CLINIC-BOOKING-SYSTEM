@@ -19,7 +19,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = env.bool("DEBUG", default=False)
 
 
 
@@ -64,6 +64,7 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "EXCEPTION_HANDLER": "apps.appointments.exceptions.custom_exception_handler",
 }
 ROOT_URLCONF = 'config.urls'
 
