@@ -168,7 +168,7 @@ every error response has a consistent `{"detail": "..."}` shape.
 ## API Endpoints
 
 Full interactive documentation (with "try it out") is available at:
-**https://clinic-booking-system-8k20.onrender.com/api/schema/swagger-ui/**
+**https://clinic-booking-system-8k20.onrender.com/api/docs/#/**
 
 ### `POST /appointments`
 Books a slot.
@@ -219,7 +219,7 @@ Returns the patient's upcoming, non-cancelled appointments sorted by date.
 ## Running Locally
 
 ```bash
-git clone [YOUR_REPO_URL]
+git clone https://github.com/Brian-Rotich20/CLINIC-BOOKING-SYSTEM
 cd clinic-booking
 python3 -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
@@ -293,43 +293,40 @@ test DB automatically), never against production data.
 
 ## AI Reflection
 
-> Draft — personalize this before submitting. This should reflect your
-> actual experience, in your own words; the assessment explicitly grades
-> honesty here over the "right" answer.
+### 1. What did you use AI for?
+- Discussing the system design and project architecture.
+- Drafting models, serializers, views, services, and tests.
+- Setting up deployment, CI/CD, and API documentation.
+- Assisting with the README and project documentation.
 
-**1. What did you use AI for across the four sections?**
-- Section 1: talking through the system design — identifying entities,
-  weighing single-app vs. multi-app structure, deciding what belongs in a
-  `services.py` layer vs. views/serializers.
-- Section 2: drafting models, serializers, views, the custom exception
-  handler, and the booking/cancel/reschedule business logic in `services.py`,
-  plus the test suite.
-- Section 3: drafting the GitHub Actions workflow, `build.sh`, Render-specific
-  settings changes (WhiteNoise, `ALLOWED_HOSTS`, `DEBUG`), and adding
-  `@extend_schema` annotations for Swagger UI.
-- Section 4: this reflection itself, as a starting draft.
+### 2. One example where AI improved your work
+- AI suggested using both application-level validation and a database constraint to prevent double bookings.
+- This improved the reliability of the booking system by reducing the risk of conflicting bookings.
 
-**2. One example where an AI suggestion improved your work.**
-[Fill with a specific example — e.g. the two-layer double-booking guard
-(pre-validation + DB-level `UniqueConstraint` inside `transaction.atomic()`)
-was suggested when discussing how to prevent race conditions on concurrent
-booking requests. Prompt: "what happens if two patients book the same slot
-at the same time?" What made it a genuine improvement rather than just
-AI-generated code: explain briefly, in your own words.]
+### 3. One example where AI was wrong or incomplete
+- AI initially focused only on configuring the CI/CD workflow.
+- After reviewing the assessment requirements, I realized I also needed to create a feature branch, open a pull request, and merge it into `main` to demonstrate the complete CI/CD pipeline.
+- I implemented the full Git workflow to satisfy the requirement.
 
-**3. One example where AI output was wrong or incomplete, and how you caught it.**
-[Fill with something real — e.g. an early `views.py` draft wasn't actually
-saved to disk before running `createsuperuser`, causing an `ImportError`
-that looked like a code problem but was a workflow mistake on your end — you
-caught it by reading the traceback file path carefully rather than assuming
-the code itself was broken. If there's a clearer example from your own
-process, use that instead — this one is more "your own catch" than "AI being
-wrong."]
+### 4. Two decisions you made without AI
+- I chose a three-app Django structure (`doctors`, `patients`, and `appointments`) because the assessment stated, *"We're starting small but want to grow."* A modular structure makes the project easier to maintain and extend as it grows.
+- I chose not to implement authentication because it was outside the scope of the assessment, allowing me to focus on delivering the required functionality.## AI Reflection
 
-**4. Two decisions you made without AI. Why did you trust your own judgment there?**
-- Choosing the three-app structure over a single app, after AI laid out the
-  trade-off — the call itself (and the reasoning about the clinic's stated
-  growth intent) was yours.
-- Deciding auth was out of scope for this assessment — a scope judgment
-  based on reading the brief, not a technical question AI was better
-  positioned to answer.
+### 1. What did you use AI for?
+- Discussing the system design and project architecture.
+- Drafting models, serializers, views, services, and tests.
+- Setting up deployment, CI/CD, and API documentation.
+- Assisting with the README and project documentation.
+
+### 2. One example where AI improved your work
+- AI suggested using both application-level validation and a database constraint to prevent double bookings.
+- This improved the reliability of the booking system by reducing the risk of conflicting bookings.
+
+### 3. One example where AI was wrong or incomplete
+- AI initially focused only on configuring the CI/CD workflow.
+- After reviewing the assessment requirements, I realized I also needed to create a feature branch, open a pull request, and merge it into `main` to demonstrate the complete CI/CD pipeline.
+- I implemented the full Git workflow to satisfy the requirement.
+
+### 4. Two decisions you made without AI
+- I chose a three-app Django structure (`doctors`, `patients`, and `appointments`) because the assessment stated, *"We're starting small but want to grow."* A modular structure makes the project easier to maintain and extend as it grows.
+- I chose not to implement authentication because it was outside the scope of the assessment, allowing me to focus on delivering the required functionality.
