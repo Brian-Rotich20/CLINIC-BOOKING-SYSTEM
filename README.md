@@ -7,11 +7,11 @@ assessment.
 
 - **Live URL:** https://clinic-booking-system-8k20.onrender.com/
 - **Repo:** https://github.com/Brian-Rotich20/CLINIC-BOOKING-SYSTEM
-- **API docs (Swagger UI):** https://clinic-booking-system-8k20.onrender.com/api/schema/swagger-ui/
+- **API docs (Swagger UI):** https://clinic-booking-system-8k20.onrender.com/api/docs/
 - **Stack:** Python · Django · Django REST Framework · PostgreSQL · Render · GitHub Actions
 
-> Note: the root URL (`/`) returns a 404 by design — there's no homepage.
-> Use `/admin/` to browse data, or the Swagger UI link above to explore and
+
+> Use  Swagger UI link above to explore and
 > test every endpoint interactively.
 
 ---
@@ -218,16 +218,83 @@ Returns the patient's upcoming, non-cancelled appointments sorted by date.
 
 ## Running Locally
 
+### 1. Clone the repository
+
 ```bash
-git clone https://github.com/Brian-Rotich20/CLINIC-BOOKING-SYSTEM
-cd clinic-booking
-python3 -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+git clone https://github.com/Brian-Rotich20/CLINIC-BOOKING-SYSTEM.git
+cd CLINIC-BOOKING-SYSTEM
+```
+
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv .venv
+
+# Linux/macOS
+source .venv/bin/activate
+
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
-cp .env.example .env          # fill in your DB credentials
+```
+
+### 4. Configure environment variables
+
+Copy the example environment file and update it with your PostgreSQL credentials.
+
+```bash
+cp .env.example .env
+```
+
+Set the following variables in your `.env` file:
+
+```env
+SECRET_KEY=your-secret-key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_HOST=your_database_host
+DB_PORT=5432
+```
+
+> Replace the database values with your own PostgreSQL credentials.``
+
+### 5. Apply database migrations
+
+```bash
 python manage.py migrate
+```
+
+### 6. Create an administrator account
+
+```bash
 python manage.py createsuperuser
+```
+
+### 7. Start the development server
+
+```bash
 python manage.py runserver
+```
+
+The application will be available at:
+
+- API: http://127.0.0.1:8000/
+- Admin: http://127.0.0.1:8000/admin/
+
+> **Note:** The project does not include seed data. After logging into the Django Admin, create at least one **Doctor**, configure their **Working Hours**, and create a **Patient** before testing the booking endpoints.
+
+### Run the test suite
+```bash
+python manage.py test
 ```
 
 Optional: `docker-compose up -d` to run Postgres locally instead of pointing
