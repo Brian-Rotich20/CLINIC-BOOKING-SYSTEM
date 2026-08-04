@@ -356,28 +356,9 @@ test DB automatically), never against production data.
   constraint; testing against SQLite could pass in CI while behaving
   differently against production Postgres.
 
----
+--
 
-## AI Reflection
-
-### 1. What did you use AI for?
-- Discussing the system design and project architecture.
-- Drafting models, serializers, views, services, and tests.
-- Setting up deployment, CI/CD, and API documentation.
-- Assisting with the README and project documentation.
-
-### 2. One example where AI improved your work
-- AI suggested using both application-level validation and a database constraint to prevent double bookings.
-- This improved the reliability of the booking system by reducing the risk of conflicting bookings.
-
-### 3. One example where AI was wrong or incomplete
-- AI initially focused only on configuring the CI/CD workflow.
-- After reviewing the assessment requirements, I realized I also needed to create a feature branch, open a pull request, and merge it into `main` to demonstrate the complete CI/CD pipeline.
-- I implemented the full Git workflow to satisfy the requirement.
-
-### 4. Two decisions you made without AI
-- I chose a three-app Django structure (`doctors`, `patients`, and `appointments`) because the assessment stated, *"We're starting small but want to grow."* A modular structure makes the project easier to maintain and extend as it grows.
-- I chose not to implement authentication because it was outside the scope of the assessment, allowing me to focus on delivering the required functionality.## AI Reflection
+ ## AI Reflection
 
 ### 1. What did you use AI for?
 - Discussing the system design and project architecture.
