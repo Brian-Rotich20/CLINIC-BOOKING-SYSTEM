@@ -1,3 +1,12 @@
+from rest_framework.views import exception_handler as drf_exception_handler
+from rest_framework.response import Response
+
+
+def custom_exception_handler(exc, context):
+    if isinstance(exc, BookingError):
+        return Response({"detail": exc.message}, status=exc.status_code)
+    return drf_exception_handler(exc, context)
+    
 class BookingError(Exception):
     """Base class for all booking-related errors. Carries an HTTP status code
     so the view layer can translate it directly without re-deciding logic."""
