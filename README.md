@@ -162,14 +162,60 @@ every error response has a consistent `{"detail": "..."}` shape.
 - **1-hour minimum lead time (bonus requirement)** is enforced inside the
   shared slot-validation function, so it automatically applies to both fresh
   bookings and reschedules without separate logic.
-
----
-
+ 
 ## API Endpoints
-
+ 
 Full interactive documentation (with "try it out") is available at:
 **https://clinic-booking-system-8k20.onrender.com/api/docs/#/**
-
+ 
+### Suggested Testing Flow
+ 
+The endpoints are connected — booking, cancelling, and rescheduling all act
+on the same appointment. Follow this order so each step has what it needs
+from the one before it. Seeded data (`doctor_id: 1`, `patient_id: 1`) is
+already available — see [Testing the Live API](#testing-the-live-api) above.
+ 
+**Step 1 — Check availability**
+Open `GET /doctors/{id}/availability` in Swagger, set `id` to `1`, and
+`date` to any upcoming Monday–Friday (e.g. `2026-08-10`). Execute. You'll
+get back a list of open 30-minute slots for that day.
+ 
+**Step 2 — Book an appointment**
+Open `POST /appointments`, use the example request body, and set
+`start_time` to one of the slots returned in Step 1 (e.g.
+`"2026-08-10T10:00:00Z"`). Execute.
+ 
+- **If you get `201 Created`** — copy the `"id"` field from the response
+  body. You'll need it for Steps 3 and 4.
+- **If you get `409` with `{"detail": "This slot was just booked by
+  someone else."}`** — this means that exact slot is already taken (likely
+  by an earlier tester, or by you on a previous run). This is expected,
+  correct behavior, not a bug — it's the double-booking guard working as
+  designed. Just pick a different `start_time` from Step 1's results (or a
+  different date entirely) and try again.
+**Step 3 — Cancel the appointment**
+Open [`PATCH /appointments/{appointment_id}/cancel`](https://clinic-booking-system-8k20.onrender.com/api/docs/#/appointments/appointments_cancel_partial_update).
+Paste the `id` you copied in Step 2 into the `appointment_id` path field,
+provide a `reason` in the request body, and Execute. Returns `200` with the
+appointment now marked `"status": "cancelled"`.
+ 
+**Step 4 — Reschedule an appointment**
+Book a fresh appointment (repeat Step 2 with a new slot, since the one from
+Step 2 may now be cancelled). Open `PATCH /appointments/{appointment_id}/reschedule`,
+paste that new appointment's `id`, and provide a new `start_time` in the
+request body. Returns `200` with the updated `start_time`.
+ 
+**Step 5 — View a patient's upcoming appointments**
+Open `GET /patients/{id}/appointments`, set `id` to `1`, and Execute. Returns
+all of patient `1`'s upcoming, non-cancelled bookings — useful for confirming
+Steps 2–4 actually took effect.
+ 
+> **Tip:** every response from Steps 2–4 returns the full appointment
+> object, including its `id` — you never need to guess an ID, just copy it
+> forward from the previous step's response.
+ 
+---
+ 
 ### `POST /appointments`
 Books a slot.
 ```json
@@ -183,7 +229,7 @@ Books a slot.
 Returns `201` with the created appointment, or `400` (invalid slot / outside
 working hours / in the past / within 1hr lead time) or `409` (slot already
 taken).
-
+ 
 ### `GET /doctors/{id}/availability?date=YYYY-MM-DD`
 Returns available 30-minute slots for that doctor on that date.
 ```json
@@ -193,7 +239,7 @@ Returns available 30-minute slots for that doctor on that date.
   {"start_time": "2026-08-10T09:30:00Z"}
 ]
 ```
-
+ 
 ### `PATCH /appointments/{id}/cancel`
 ```json
 // Request
@@ -201,7 +247,7 @@ Returns available 30-minute slots for that doctor on that date.
 ```
 Returns `200` with the updated appointment, or `400` if already cancelled or
 reason is missing, or `404` if not found.
-
+ 
 ### `PATCH /appointments/{id}/reschedule`
 ```json
 // Request
@@ -210,10 +256,10 @@ reason is missing, or `404` if not found.
 Returns `200` with the updated appointment. New slot is validated exactly as
 a fresh booking would be. Returns `400` if the appointment is already
 cancelled, or `409` if the new slot is taken.
-
+ 
 ### Bonus: `GET /patients/{id}/appointments`
 Returns the patient's upcoming, non-cancelled appointments sorted by date.
-
+ 
 ---
 
 ## Running Locally
